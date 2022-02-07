@@ -27,9 +27,9 @@ else ifeq "$(ARCH)" "ARM64"
     ARM_SETTING=-lrt
 endif
 
-ifeq "$(OPT_LEVEL)" "GENERIC"
+# ifeq "$(OPT_LEVEL)" "GENERIC"
     USE_OPT_LEVEL=_GENERIC_
-endif
+# endif
 
 ifeq "$(ARCHITECTURE)" "_AMD64_"
 	ifeq "$(USE_OPT_LEVEL)" "_FAST_"
@@ -63,31 +63,39 @@ endif
 
 ifeq "$(USE_OPT_LEVEL)" "_GENERIC_"
     EXTRA_OBJECTS_128=objs128/fp_generic.o
+	EXTRA_OBJECTS_182=objs182/fp_generic.o
     EXTRA_OBJECTS_434=objs434/fp_generic.o
     EXTRA_OBJECTS_503=objs503/fp_generic.o
     EXTRA_OBJECTS_751=objs751/fp_generic.o
 else ifeq "$(USE_OPT_LEVEL)" "_FAST_"
 ifeq "$(ARCHITECTURE)" "_AMD64_"
 	EXTRA_OBJECTS_128=objs128/fp_x64.o objs128/fp_x64_asm.o
+	EXTRA_OBJECTS_182=objs182/fp_x64.o objs182/fp_x64_asm.o
 	EXTRA_OBJECTS_434=objs434/fp_x64.o objs434/fp_x64_asm.o
 	EXTRA_OBJECTS_503=objs503/fp_x64.o objs503/fp_x64_asm.o
 	EXTRA_OBJECTS_751=objs751/fp_x64.o objs751/fp_x64_asm.o
 	CFLAGS+= -fPIC
 else ifeq "$(ARCHITECTURE)" "_ARM64_"
     EXTRA_OBJECTS_128=objs128/fp_arm64.o objs128/fp_arm64_asm.o
+    EXTRA_OBJECTS_182=objs182/fp_arm64.o objs182/fp_arm64_asm.o
     EXTRA_OBJECTS_434=objs434/fp_arm64.o objs434/fp_arm64_asm.o
     EXTRA_OBJECTS_503=objs503/fp_arm64.o objs503/fp_arm64_asm.o
     EXTRA_OBJECTS_751=objs751/fp_arm64.o objs751/fp_arm64_asm.o
 endif
 endif
 OBJECTS_128=objs128/P128.o $(EXTRA_OBJECTS_128) objs/random.o objs/fips202.o
+OBJECTS_182=objs182/P182.o $(EXTRA_OBJECTS_182) objs/random.o objs/fips202.o
 OBJECTS_434=objs434/P434.o $(EXTRA_OBJECTS_434) objs/random.o objs/fips202.o
 OBJECTS_503=objs503/P503.o $(EXTRA_OBJECTS_503) objs/random.o objs/fips202.o
 OBJECTS_751=objs751/P751.o $(EXTRA_OBJECTS_751) objs/random.o objs/fips202.o
 
-all: lib128 lib434 lib503 lib751 tests tests_vow tests_vow_sidh tests_vow_sike
+all: lib128 lib182 lib434 lib503 lib751 tests tests_vow tests_vow_sidh tests_vow_sike
 
 objs128/%.o: src/P128/%.c
+	@mkdir -p $(@D)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+objs182/%.o: src/P182/%.c
 	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) $< -o $@
 
@@ -108,6 +116,9 @@ ifeq "$(USE_OPT_LEVEL)" "_GENERIC_"
 objs128/fp_generic.o: src/P128/generic/fp_generic.c
 	$(CC) -c $(CFLAGS) src/P128/generic/fp_generic.c -o objs128/fp_generic.o
 
+objs182/fp_generic.o: src/P182/generic/fp_generic.c
+	$(CC) -c $(CFLAGS) src/P182/generic/fp_generic.c -o objs182/fp_generic.o
+
 objs434/fp_generic.o: src/P434/generic/fp_generic.c
 	$(CC) -c $(CFLAGS) src/P434/generic/fp_generic.c -o objs434/fp_generic.o
 
@@ -123,6 +134,12 @@ objs128/fp_x64.o: src/P128/AMD64/fp_x64.c
 
 objs128/fp_x64_asm.o: src/P128/AMD64/fp_x64_asm.S
 	$(CC) -c $(CFLAGS) src/P128/AMD64/fp_x64_asm.S -o objs128/fp_x64_asm.o
+
+objs182/fp_x64.o: src/P182/AMD64/fp_x64.c
+	$(CC) -c $(CFLAGS) src/P182/AMD64/fp_x64.c -o objs182/fp_x64.o
+
+objs182/fp_x64_asm.o: src/P182/AMD64/fp_x64_asm.S
+	$(CC) -c $(CFLAGS) src/P182/AMD64/fp_x64_asm.S -o objs182/fp_x64_asm.o
 
 objs434/fp_x64.o: src/P434/AMD64/fp_x64.c
 	$(CC) -c $(CFLAGS) src/P434/AMD64/fp_x64.c -o objs434/fp_x64.o
@@ -147,6 +164,12 @@ else ifeq "$(ARCHITECTURE)" "_ARM64_"
 
     objs128/fp_arm64_asm.o: src/P128/ARM64/fp_arm64_asm.S
 	    $(CC) -c $(CFLAGS) src/P128/ARM64/fp_arm64_asm.S -o objs128/fp_arm64_asm.o
+
+	objs182/fp_arm64.o: src/P182/ARM64/fp_arm64.c
+	    $(CC) -c $(CFLAGS) src/P182/ARM64/fp_arm64.c -o objs182/fp_arm64.o
+
+    objs182/fp_arm64_asm.o: src/P182/ARM64/fp_arm64_asm.S
+	    $(CC) -c $(CFLAGS) src/P182/ARM64/fp_arm64_asm.S -o objs182/fp_arm64_asm.o
 			
     objs434/fp_arm64.o: src/P434/ARM64/fp_arm64.c
 	    $(CC) -c $(CFLAGS) src/P434/ARM64/fp_arm64.c -o objs434/fp_arm64.o
@@ -191,6 +214,15 @@ $(DEPENDENT_OBJS_128):
 	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) -D P128 $< -o $@
 
+DEPENDENT_OBJS_182=objs/sike_vow182.o objs/sidh_vow182.o objs/memory182.o objs/triples182.o
+objs/sike_vow182.o: src/sike_vow.c
+objs/sidh_vow182.o: src/sidh_vow.c
+objs/memory182.o: src/memory.c
+objs/triples182.o: src/triples.c
+$(DEPENDENT_OBJS_182):
+	@mkdir -p $(@D)
+	$(CC) -c $(CFLAGS) -D P182 $< -o $@
+
 DEPENDENT_OBJS_434=objs/sike_vow434.o objs/sidh_vow434.o objs/memory434.o objs/triples434.o
 objs/sike_vow434.o: src/sike_vow.c
 objs/sidh_vow434.o: src/sidh_vow.c
@@ -210,6 +242,12 @@ lib128: $(OBJECTS_128)
 	$(AR) lib128/libsidh.a $^
 	$(RANLIB) lib128/libsidh.a
 
+lib182: $(OBJECTS_182)
+	rm -rf lib182 sike182 sidh182
+	mkdir lib182 sike182 sidh182
+	$(AR) lib182/libsidh.a $^
+	$(RANLIB) lib182/libsidh.a
+
 lib434: $(OBJECTS_434)
 	rm -rf lib434 sike434 sidh434
 	mkdir lib434 sike434 sidh434
@@ -228,8 +266,9 @@ lib751: $(OBJECTS_751)
 	$(AR) lib751/libsidh.a $^
 	$(RANLIB) lib751/libsidh.a
 
-tests: lib128 lib434 lib503 lib751
+tests: lib128 lib182 lib434 lib503 lib751
 	$(CC) $(CFLAGS) -L./lib128 tests/arith_tests-p128.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p128 $(ARM_SETTING)
+	$(CC) $(CFLAGS) -L./lib182 tests/arith_tests-p182.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p182 $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib434 tests/arith_tests-p434.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p434 $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib503 tests/arith_tests-p503.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p503 $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib751 tests/arith_tests-p751.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p751 $(ARM_SETTING)
@@ -285,6 +324,12 @@ vow_sidh: objs/sidh_vow.o objs/prng.o objs/networking.o objs/storage.o objs/bint
 	$(RANLIB) vow_sidh/libvow_sidh.a
 
 vow_sidh128: objs/sidh_vow128.o objs/prng.o objs/networking.o objs/storage.o objs/bintree.o objs/memory128.o objs/xxhash.o objs/fips202.o objs/triples128.o $(AES_OBJS)
+	rm -rf vow_sidh
+	mkdir vow_sidh
+	$(AR) vow_sidh/libvow_sidh.a $^
+	$(RANLIB) vow_sidh/libvow_sidh.a
+
+vow_sidh182: objs/sidh_vow182.o objs/prng.o objs/networking.o objs/storage.o objs/bintree.o objs/memory182.o objs/xxhash.o objs/fips202.o objs/triples182.o $(AES_OBJS)
 	rm -rf vow_sidh
 	mkdir vow_sidh
 	$(AR) vow_sidh/libvow_sidh.a $^
@@ -379,6 +424,9 @@ vow_sidh_swig434: $(OBJECTS_434) objs/sidh_vow434.o objs/prng.o objs/networking.
 tests_vow_sidh128: vow_sidh128 lib128
 	$(CC) $(CFLAGS) -D P128 -L./vow_sidh -L./lib128 tests/test_vOW_SIDH.c tests/test_extras.c -lvow_sidh -lsidh $(LDFLAGS) -o test_vOW_SIDH_128 $(ARM_SETTING)
 
+tests_vow_sidh182: vow_sidh182 lib182
+	$(CC) $(CFLAGS) -D P182 -L./vow_sidh -L./lib182 tests/test_vOW_SIDH.c tests/test_extras.c -lvow_sidh -lsidh $(LDFLAGS) -o test_vOW_SIDH_182 $(ARM_SETTING)
+
 tests_vow_sidh434: vow_sidh434 lib434
 	$(CC) $(CFLAGS) -D P434 -L./vow_sidh -L./lib434 tests/test_vOW_SIDH.c tests/test_extras.c -lvow_sidh -lsidh $(LDFLAGS) -o test_vOW_SIDH_434 $(ARM_SETTING)
 
@@ -392,13 +440,19 @@ vow_sike128: objs/sike_vow128.o objs/prng.o objs/networking.o objs/storage.o obj
 	$(AR) vow_sike/libvow_sike.a $^
 	$(RANLIB) vow_sike/libvow_sike.a
 
+vow_sike182: objs/sike_vow182.o objs/prng.o objs/networking.o objs/storage.o objs/bintree.o objs/memory182.o objs/xxhash.o objs/fips202.o objs/triples182.o $(AES_OBJS)
+	rm -rf vow_sike
+	mkdir vow_sike
+	$(AR) vow_sike/libvow_sike.a $^
+	$(RANLIB) vow_sike/libvow_sike.a
+
 vow_sike434: objs/sike_vow434.o objs/prng.o objs/networking.o objs/storage.o objs/bintree.o objs/memory434.o objs/xxhash.o objs/fips202.o objs/triples434.o $(AES_OBJS)
 	rm -rf vow_sike
 	mkdir vow_sike
 	$(AR) vow_sike/libvow_sike.a $^
 	$(RANLIB) vow_sike/libvow_sike.a
 
-vow_sike: vow_sike128 vow_sike434
+vow_sike: vow_sike128 vow_sike182 vow_sike434
 
 vow_sike_swig128: $(OBJECTS_128) objs/sike_vow128.o objs/prng.o objs/networking.o objs/storage.o objs/xxhash.o objs/triples128.o objs/fips202.o $(AES_OBJS)
 	make lib128
@@ -454,10 +508,16 @@ vow_sike_swig434: $(OBJECTS_434) objs/sike_vow434.o objs/prng.o objs/networking.
 tests_vow_sike128: vow_sike128 lib128
 	$(CC) $(CFLAGS) -D P128 -L./vow_sike -L./lib128 tests/test_vOW_SIKE.c tests/test_extras.c -lvow_sike -lsidh $(LDFLAGS) -o test_vOW_SIKE_128 $(ARM_SETTING)
 
+tests_vow_sike182: vow_sike182 lib182
+	$(CC) $(CFLAGS) -D P182 -L./vow_sike -L./lib182 tests/test_vOW_SIKE.c tests/test_extras.c -lvow_sike -lsidh $(LDFLAGS) -o test_vOW_SIKE_182 $(ARM_SETTING)
+
 tests_vow_sike434: vow_sike434 lib434
 	$(CC) $(CFLAGS) -D P434 -L./vow_sike -L./lib434 tests/test_vOW_SIKE.c tests/test_extras.c -lvow_sike -lsidh $(LDFLAGS) -o test_vOW_SIKE_434 $(ARM_SETTING)
 
-tests_vow_sike: tests_vow_sike128 tests_vow_sike434
+tests_vow_sike: tests_vow_sike128 tests_vow_sike182 tests_vow_sike434
+
+p182_unit_test: tests_vow_sike182 
+	$(CC) $(CFLAGS) -D P182 -L./vow_sike -L./lib182 src/P182/driver.c -lvow_sike -lsidh $(LDFLAGS) -o p182test $(ARM_SETTING)
 
 check: tests tests_vow tests_vow_sidh tests_vow_sike
 

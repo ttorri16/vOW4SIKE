@@ -524,4 +524,4 @@ check: tests tests_vow tests_vow_sidh tests_vow_sike
 .PHONY: clean
 
 clean:
-	rm -rf *.req objs* lib* sidh* sike* arith_tests-* vow_* test_vOW_* python/vow_*
+	rm -rf *.req objs* lib* sidh* sike* arith_tests-* vow_* test_vOW_* python/vow_* p182test 

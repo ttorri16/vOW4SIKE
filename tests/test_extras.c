@@ -45,6 +45,8 @@
     #define NBITS_FIELD128    0
 #endif
 
+static uint64_t p182[3] = { 0xffffffffffffffff, 0xd9a6c7b117ffffff, 0x2895ac20d5040b };
+
 static uint64_t p434[7]  = { 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFDC1767AE2FFFFFF, 
                              0x7BC65C783158AEA3, 0x6CFC5FD681C52056, 0x0002341F27177344 };
 static uint64_t p503[8]  = { 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xABFFFFFFFFFFFFFF, 
@@ -52,6 +54,7 @@ static uint64_t p503[8]  = { 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFF
 static uint64_t p751[12] = { 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 0xEEAFFFFFFFFFFFFF,
                              0xE3EC968549F878A8, 0xDA959B1A13F7CC76, 0x084E9867D6EBE876, 0x8562B5045CB25748, 0x0E12909F97BADC66, 0x00006FE5D541F71C };
 
+#define NBITS_FIELD182    182
 #define NBITS_FIELD434    434
 #define NBITS_FIELD503    503
 #define NBITS_FIELD751    751
@@ -125,6 +128,24 @@ void fprandom128_test(digit_t* a)
     }
 }
 
+void fprandom182_test(digit_t* a)
+{ // Generating a pseudo-random field element in [0, p128-1] 
+  // SECURITY NOTE: distribution is not fully uniform. TO BE USED FOR TESTING ONLY.
+    unsigned int i, diff = 192-NBITS_FIELD182, nwords = NBITS_TO_NWORDS(NBITS_FIELD182);                    
+    unsigned char* string = NULL;
+
+    string = (unsigned char*)a;
+    for (i = 0; i < sizeof(digit_t)*nwords; i++) {
+        *(string + i) = (unsigned char)rand();              // Obtain 182-bit number
+    }
+    a[nwords-1] &= (((digit_t)(-1) << diff) >> diff);
+
+    while (compare_words((digit_t*)p182, a, nwords) < 1) {  // Force it to [0, modulus-1]
+        sub_test(a, (digit_t*)p182, a, nwords);
+    }
+}
+
+
 
 void fprandom434_test(digit_t* a)
 { // Generating a pseudo-random field element in [0, p434-1] 
@@ -186,6 +207,14 @@ void fp2random128_test(digit_t* a)
 
     fprandom128_test(a);
     fprandom128_test(a+NBITS_TO_NWORDS(NBITS_FIELD128));
+}
+
+void fp2random182_test(digit_t* a)
+{ // Generating a pseudo-random element in GF(p182^2) 
+  // SECURITY NOTE: distribution is not fully uniform. TO BE USED FOR TESTING ONLY.
+
+    fprandom182_test(a);
+    fprandom182_test(a+NBITS_TO_NWORDS(NBITS_FIELD182));
 }
 
 

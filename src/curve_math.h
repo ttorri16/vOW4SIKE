@@ -33,6 +33,22 @@
     #define fp2sqr_mont                   fp2sqr434_mont
     #define fpinv_mont                    fpinv434_mont
     #define fp2inv_mont                   fp2inv434_mont
+#elif defined(P182)
+    #include "P182/P182_internal.h"
+    extern const uint64_t Montgomery_one[NWORDS64_FIELD];
+    #define fpcopy                        fpcopy182
+    #define fpzero                        fpzero182
+    #define fpsub                         fpsub182
+    #define fpneg                         fpneg182
+    #define fp2copy                       fp2copy182
+    #define fp2add                        fp2add182
+    #define fp2sub                        fp2sub182
+    #define fp2neg                        fp2neg182
+    #define fp2correction                 fp2correction182
+    #define fp2mul_mont                   fp2mul182_mont
+    #define fp2sqr_mont                   fp2sqr182_mont
+    #define fpinv_mont                    fpinv182_mont
+    #define fp2inv_mont                   fp2inv182_mont
 #endif
 
 /* Functions from an isogeny library */

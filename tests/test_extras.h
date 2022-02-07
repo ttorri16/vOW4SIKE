@@ -32,6 +32,10 @@ void fprandom128_test(digit_t* a);
 // Generating a pseudo-random element in GF(p128^2)
 void fp2random128_test(digit_t* a);
 
+void fprandom182_test(digit_t* a);
+
+void fp2random182_test(digit_t* a);
+
 // Generating a pseudo-random field element in [0, p434-1] 
 void fprandom434_test(digit_t* a);
 

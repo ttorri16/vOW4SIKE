@@ -17,7 +17,6 @@ __inline void fpadd182(const digit_t* a, const digit_t* b, digit_t* c)
 { // Modular addition, c = a+b mod p182.
   // Inputs: a, b in [0, 2*p182-1] 
   // Output: c in [0, 2*p182-1] 
-    printf("Adding\n");
 
     unsigned int i, carry = 0;
     digit_t mask;

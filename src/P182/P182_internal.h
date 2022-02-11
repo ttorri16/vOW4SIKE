@@ -18,6 +18,7 @@
     #define p182_ZERO_WORDS 1               // Number of "0" digits in the least significant part of p182 + 1
 #endif
 
+/* p182 = 2^91 * 3^57 - 1 */
 
 // Basic constants
 
@@ -35,14 +36,36 @@
 #define BOB                     1 
 #define OALICE_BITS             91          // number of bits in 2**e2
 #define OBOB_BITS               91          // number of bits in 3**e3
+#define OBOB_EXPON              57          // Bob's part is 3**57 (e3 = 57)
 #define PRIME                   p182 
 #define PARAM_A                 6  
 #define PARAM_C                 1
 // Fixed parameters for isogeny tree computation
-#define MAX_INT_POINTS_ALICE    7
+// #define MAX_INT_POINTS_ALICE    7           
+#define SECRETKEY_A_BYTES       ((OALICE_BITS + 7) / 8)
+#define SECRETKEY_B_BYTES       ((OBOB_BITS - 1 + 7) / 8)
 #define FP2_ENCODED_BYTES       2*((NBITS_FIELD + 7) / 8)
 
 
+// #define ALICE                   0
+// #define BOB                     1 
+// #define OALICE_BITS             216  
+// #define OBOB_BITS               218     
+// #define MASK_ALICE              0xFF 
+// #define MASK_BOB                0x01 
+// #define PRIME                   p434 
+// #define PARAM_A                 6  
+// #define PARAM_C                 1
+// Fixed parameters for isogeny tree computation
+// #define MAX_INT_POINTS_ALICE    7        
+// #define MAX_INT_POINTS_BOB      8      
+// #define MAX_Alice               108
+// #define MAX_Bob                 137
+// #define MSG_BYTES               16
+// #define SECRETKEY_A_BYTES       ((OALICE_BITS + 7) / 8)
+// #define SECRETKEY_B_BYTES       ((OBOB_BITS - 1 + 7) / 8)
+// #define FP2_ENCODED_BYTES       2*((NBITS_FIELD + 7) / 8)
+// 
 // SIDH's basic element definitions and point representations
 
 typedef digit_t felm_t[NWORDS_FIELD];                                 // Datatype for representing 182-bit field elements 

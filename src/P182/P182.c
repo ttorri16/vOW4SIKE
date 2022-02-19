@@ -50,6 +50,13 @@
     const uint64_t Montgomery_R2[NWORDS64_FIELD] =  { 0xb5926932c396fc6a, 0xd16b783ad39e820b, 0x11db6d93928d2c};
     const uint64_t Montgomery_one[NWORDS64_FIELD] = { 0x000000000000064e, 0xc681017ab0000000, 0x205cc901007d49};
 
+const unsigned int strat_Alice[MAX_Alice-1] = { 
+19, 12, 7, 4, 2, 1, 1, 2, 1, 1, 3, 2, 1, 1, 1, 1, 5, 3, 2, 1, 1, 1, 1, 2, 1, 1, 1, 8, 4, 3, 2, 1, 1, 1, 1, 2, 1, 1, 
+4, 2, 1, 1, 2, 1, 1};
+
+const unsigned int strat_Bob[MAX_Bob-1] = { 
+26, 15, 8, 4, 2, 1, 1, 2, 1, 1, 4, 2, 1, 1, 2, 1, 1, 7, 4, 2, 1, 1, 2, 1, 1, 3, 2, 1, 1, 1, 1, 11, 7, 4, 2, 1, 1, 2, 
+1, 1, 3, 2, 1, 1, 1, 1, 4, 3, 2, 1, 1, 1, 1, 2, 1, 1};
 // Setting up macro defines and including GF(p), GF(p^2), curve, isogeny and kex functions
 #define fpcopy                        fpcopy182
 #define fpzero                        fpzero182

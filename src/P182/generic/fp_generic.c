@@ -38,10 +38,47 @@ __inline void fpadd182(const digit_t* a, const digit_t* b, digit_t* c)
 } 
 
 
+__inline void fpadd182_fast(const digit_t* a, const digit_t* b, digit_t* c) {
+    
+/* We know NWORDS_FIELD == 3, so use this info to avoid for loops -> hopefully 
+    this will compile to fewer instructions */
+/*NOTE: this is technically no longer generic since it assumes a 64-bit architecture, but
+        I'm pretty sure there are other places in the code that also make this assumption */
+
+    unsigned int i, carry = 0;
+    digit_t mask;
+
+    // for (i = 0; i < NWORDS_FIELD; i++) {
+        // ADDC(carry, a[i], b[i], carry, c[i]); 
+    // }
+    ADDC(carry, a[0], b[0], carry, c[0]); 
+    ADDC(carry, a[1], b[1], carry, c[1]); 
+    ADDC(carry, a[2], b[2], carry, c[2]); 
+
+    carry = 0;
+    // for (i = 0; i < NWORDS_FIELD; i++) {
+        // SUBC(carry, c[i], ((digit_t*)p182x2)[i], carry, c[i]); 
+    // }
+    SUBC(carry, c[0], ((digit_t*)p182x2)[0], carry, c[0]); 
+    SUBC(carry, c[1], ((digit_t*)p182x2)[1], carry, c[1]); 
+    SUBC(carry, c[2], ((digit_t*)p182x2)[2], carry, c[2]); 
+    mask = 0 - (digit_t)carry;
+
+    carry = 0;
+    // for (i = 0; i < NWORDS_FIELD; i++) {
+        // ADDC(carry, c[i], ((digit_t*)p182x2)[i] & mask, carry, c[i]); 
+    // }
+    ADDC(carry, c[0], ((digit_t*)p182x2)[0] & mask, carry, c[0]); 
+    ADDC(carry, c[1], ((digit_t*)p182x2)[1] & mask, carry, c[1]); 
+    ADDC(carry, c[2], ((digit_t*)p182x2)[2] & mask, carry, c[2]); 
+}
+
+
 __inline void fpsub182(const digit_t* a, const digit_t* b, digit_t* c)
 { // Modular subtraction, c = a-b mod p182.
   // Inputs: a, b in [0, 2*p182-1] 
-  // Output: c in [0, 2*p182-1] 
+  // Output: c in [0, 2*p182-1]
+//   printf("fpsub182\n"); 
     unsigned int i, borrow = 0;
     digit_t mask;
 
@@ -137,6 +174,7 @@ void digit_x_digit(const digit_t a, const digit_t b, digit_t* c)
 
 void mp_mul(const digit_t* a, const digit_t* b, digit_t* c, const unsigned int nwords)
 { // Multiprecision comba multiply, c = a*b, where lng(a) = lng(b) = nwords.   
+    // printf("mp_mul\n");
     unsigned int i, j;
     digit_t t = 0, u = 0, v = 0, UV[2];
     unsigned int carry = 0;
@@ -175,6 +213,7 @@ void rdc_mont(digit_t* ma, digit_t* mc)
   // mc = ma*R^-1 mod p182x2, where R = 2^182.
   // If ma < 2^182*p182, the output mc is in the range [0, 2*p182-1].
   // ma is assumed to be in Montgomery representation.
+//   printf("rdc_mont\n");
     unsigned int i, j, carry, count = p182_ZERO_WORDS;
     digit_t UV[2], t = 0, u = 0, v = 0;
 

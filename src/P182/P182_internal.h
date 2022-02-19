@@ -41,11 +41,13 @@
 #define PARAM_A                 6  
 #define PARAM_C                 1
 // Fixed parameters for isogeny tree computation
-// #define MAX_INT_POINTS_ALICE    7           
 #define SECRETKEY_A_BYTES       ((OALICE_BITS + 7) / 8)
 #define SECRETKEY_B_BYTES       ((OBOB_BITS - 1 + 7) / 8)
 #define FP2_ENCODED_BYTES       2*((NBITS_FIELD + 7) / 8)
-
+#define MAX_INT_POINTS_ALICE    6   // ceil( log(46) )  
+#define MAX_INT_POINTS_BOB      6   // ceil( log(57) ) 
+#define MAX_Alice               46  // e2 / 2
+#define MAX_Bob                 57  // e3
 
 // #define ALICE                   0
 // #define BOB                     1 
@@ -125,7 +127,7 @@ void fpzero182(digit_t* a);
 
 // Modular addition, c = a+b mod p182
 extern void fpadd182(const digit_t* a, const digit_t* b, digit_t* c);
-extern void fpadd182_asm(const digit_t* a, const digit_t* b, digit_t* c);
+extern void fpadd182_fast(const digit_t* a, const digit_t* b, digit_t* c);
 
 // Modular subtraction, c = a-b mod p182
 extern void fpsub182(const digit_t* a, const digit_t* b, digit_t* c);

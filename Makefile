@@ -52,7 +52,7 @@ endif
 AR=ar rcs
 RANLIB=ranlib
 
-CFLAGS=$(OPT) $(ADDITIONAL_SETTINGS) -D $(ARCHITECTURE) -D __LINUX__ -D $(USE_OPT_LEVEL) -D $(P128_PRIME) $(MULX) $(ADX) -fopenmp -fPIE
+CFLAGS=$(OPT) -ggdb3 $(ADDITIONAL_SETTINGS) -D $(ARCHITECTURE) -D __LINUX__ -D $(USE_OPT_LEVEL) -D $(P128_PRIME) $(MULX) $(ADX) -fopenmp -fPIE
 LDFLAGS=-lm
 
 ifeq "$(ARCHITECTURE)" "_AMD64_"
@@ -270,14 +270,15 @@ tests: lib128 lib182 lib434 lib503 lib751
 	$(CC) $(CFLAGS) -L./lib128 tests/arith_tests-p128.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p128 $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib182 tests/arith_tests-p182.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p182 $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib434 tests/arith_tests-p434.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p434 $(ARM_SETTING)
-	$(CC) $(CFLAGS) -L./lib503 tests/arith_tests-p503.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p503 $(ARM_SETTING)
-	$(CC) $(CFLAGS) -L./lib751 tests/arith_tests-p751.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p751 $(ARM_SETTING)
+	# $(CC) $(CFLAGS) -L./lib503 tests/arith_tests-p503.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p503 $(ARM_SETTING)
+	# $(CC) $(CFLAGS) -L./lib751 tests/arith_tests-p751.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p751 $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib434 tests/test_SIDHp434.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh434/test_SIDH $(ARM_SETTING)
-	$(CC) $(CFLAGS) -L./lib503 tests/test_SIDHp503.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh503/test_SIDH $(ARM_SETTING)
-	$(CC) $(CFLAGS) -L./lib751 tests/test_SIDHp751.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh751/test_SIDH $(ARM_SETTING)
+	# $(CC) $(CFLAGS) -L./lib503 tests/test_SIDHp503.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh503/test_SIDH $(ARM_SETTING)
+	# $(CC) $(CFLAGS) -L./lib751 tests/test_SIDHp751.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh751/test_SIDH $(ARM_SETTING)
+	# $(CC) $(CFLAGS) -L./lib434 tests/test_SIKEp182.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike434/test_SIKE $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib434 tests/test_SIKEp434.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike434/test_SIKE $(ARM_SETTING)
-	$(CC) $(CFLAGS) -L./lib503 tests/test_SIKEp503.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike503/test_SIKE $(ARM_SETTING)
-	$(CC) $(CFLAGS) -L./lib751 tests/test_SIKEp751.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike751/test_SIKE $(ARM_SETTING)
+	# $(CC) $(CFLAGS) -L./lib503 tests/test_SIKEp503.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike503/test_SIKE $(ARM_SETTING)
+	# $(CC) $(CFLAGS) -L./lib751 tests/test_SIKEp751.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike751/test_SIKE $(ARM_SETTING)
 	
 # AES
 AES_OBJS=objs/aes/aes.o objs/aes/aes_c.o

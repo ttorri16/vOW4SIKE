@@ -1,0 +1,120 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 20.70      0.06     0.06                             mul128_asm
+ 18.97      0.12     0.06                             rdc128_asm
+ 10.35      0.15     0.03 14109773     0.00     0.00  rdc_mont
+ 10.35      0.18     0.03  7966472     0.00     0.00  mp_shiftr1
+  6.90      0.20     0.02  4128520     0.00     0.00  fp2mul128_mont
+  6.90      0.22     0.02  2348222     0.00     0.00  fp2sqr128_mont
+  5.17      0.23     0.02                             mp_add128_asm
+  3.45      0.24     0.01 18238293     0.00     0.00  mp_mul
+  3.45      0.25     0.01  5688895     0.00     0.00  fpmul128_mont
+  3.45      0.26     0.01   291429     0.00     0.00  aes128_load_schedule_ni
+  3.45      0.27     0.01    81919     0.00     0.00  fpinv128_mont
+  3.45      0.28     0.01                             fpsub128_asm
+  3.45      0.29     0.01                             mp_dblsub128x2_asm
+  0.00      0.29     0.00  7966472     0.00     0.00  mp_shiftl1
+  0.00      0.29     0.00  7044707     0.00     0.00  fpsub128
+  0.00      0.29     0.00  5466501     0.00     0.00  fpadd128
+  0.00      0.29     0.00  1369258     0.00     0.00  fpcorrection128
+  0.00      0.29     0.00  1143359     0.00     0.00  fp2copy128
+  0.00      0.29     0.00   582854     0.00     0.00  from_mont
+  0.00      0.29     0.00   557037     0.00     0.00  fpcopy128
+  0.00      0.29     0.00   557037     0.00     0.00  fpzero128
+  0.00      0.29     0.00   393202     0.00     0.00  fp2correction128
+  0.00      0.29     0.00   352212     0.00     0.00  AES128_enc
+  0.00      0.29     0.00   352212     0.00     0.00  aes128_enc_ni
+  0.00      0.29     0.00   352211     0.00     0.00  fix_overflow
+  0.00      0.29     0.00   344049     0.00     0.00  xDBLADD
+  0.00      0.29     0.00   291429     0.00     0.00  AES128_load_schedule
+  0.00      0.29     0.00   291428     0.00     0.00  XOF
+  0.00      0.29     0.00   291427     0.00     0.00  UpdateStSIDH
+  0.00      0.29     0.00   291427     0.00     0.00  fp2_encode
+  0.00      0.29     0.00   291427     0.00     0.00  from_fp2mont
+  0.00      0.29     0.00   218419     0.00     0.00  fp2add128
+  0.00      0.29     0.00   204403     0.00     0.00  DistinguishedSIDH
+  0.00      0.29     0.00   204403     0.00     0.00  UpdateSIDH
+  0.00      0.29     0.00   196596     0.00     0.00  eval_4_isog
+  0.00      0.29     0.00   169269     0.00     0.00  fp2sub128
+  0.00      0.29     0.00   163838     0.00     0.00  fpsqr128_mont
+  0.00      0.29     0.00   135314     0.00     0.00  copy_trip
+  0.00      0.29     0.00   131065     0.00     0.00  LadderThreePtSIKE
+  0.00      0.29     0.00   106567     0.00     0.00  fpneg128
+  0.00      0.29     0.00    81919     0.00     0.00  fp2inv128_mont
+  0.00      0.29     0.00    74043     0.00     0.00  is_equal_st
+  0.00      0.29     0.00    65534     0.00     0.00  copy_words
+  0.00      0.29     0.00    65532     0.00     0.00  IsogenyWithPoints.constprop.0
+  0.00      0.29     0.00    65532     0.00     0.00  get_4_isog
+  0.00      0.29     0.00    60784     0.00     0.00  SampleSIDH
+  0.00      0.29     0.00    60784     0.00     0.00  clean_private_state
+  0.00      0.29     0.00    60784     0.00     0.00  sample_prng
+  0.00      0.29     0.00    60760     0.00     0.00  MemIndexSIDH
+  0.00      0.29     0.00    60044     0.00     0.00  xDBL_affine
+  0.00      0.29     0.00    49152     0.00     0.00  j_inv
+  0.00      0.29     0.00    27050     0.00     0.00  IsEqualJinvSIDH
+  0.00      0.29     0.00    16383     0.00     0.00  FourwayInv
+  0.00      0.29     0.00      515     0.00     0.00  free_trip
+  0.00      0.29     0.00       11     0.00     0.00  UpdateRandomFunctionSIDH
+  0.00      0.29     0.00       11     0.00     0.00  stakhanovist_resync_do_resync
+  0.00      0.29     0.00       11     0.00     0.00  stakhanovist_resync_should_resync
+  0.00      0.29     0.00        6     0.00     0.00  EvalTwoIsogenyWithXneZ
+  0.00      0.29     0.00        3     0.00     0.00  EvalFourIsogenyWithKernelXeqZ
+  0.00      0.29     0.00        2     0.00     0.00  cpu_cycles
+  0.00      0.29     0.00        2     0.00     0.00  cpucycles
+  0.00      0.29     0.00        2     0.00     0.00  initTree
+  0.00      0.29     0.00        2     0.00     0.00  to_mont
+  0.00      0.29     0.00        1     0.00     0.00  OptStrat.constprop.0
+  0.00      0.29     0.00        1     0.00    84.97  PrecompLeftCurve
+  0.00      0.29     0.00        1     0.00    42.48  PrecompRightCurve
+  0.00      0.29     0.00        1     0.00     0.00  cleanup_private_memory
+  0.00      0.29     0.00        1     0.00     0.00  cleanup_shared_memory
+  0.00      0.29     0.00        1     0.00     0.00  fp2_decode
+  0.00      0.29     0.00        1     0.00     0.00  fp2_is_equal
+  0.00      0.29     0.00        1     0.00     0.00  free_private_state
+  0.00      0.29     0.00        1     0.00     0.00  free_shared_state
+  0.00      0.29     0.00        1     0.00     0.00  init_private_state
+  0.00      0.29     0.00        1     0.00     0.00  init_prng
+  0.00      0.29     0.00        1     0.00   127.45  init_shared_state
+  0.00      0.29     0.00        1     0.00     0.00  init_trip
+  0.00      0.29     0.00        1     0.00     0.00  initialize_private_memory
+  0.00      0.29     0.00        1     0.00     0.00  initialize_shared_memory
+  0.00      0.29     0.00        1     0.00     0.00  reset_shared_state
+  0.00      0.29     0.00        1     0.00     0.00  run_benchmark
+  0.00      0.29     0.00        1     0.00     0.00  to_fp2mont
+  0.00      0.29     0.00        1     0.00     0.00  vOW
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.

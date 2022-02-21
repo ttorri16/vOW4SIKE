@@ -27,9 +27,9 @@ else ifeq "$(ARCH)" "ARM64"
     ARM_SETTING=-lrt
 endif
 
-# ifeq "$(OPT_LEVEL)" "GENERIC"
+ifeq "$(OPT_LEVEL)" "GENERIC"
     USE_OPT_LEVEL=_GENERIC_
-# endif
+endif
 
 ifeq "$(ARCHITECTURE)" "_AMD64_"
 	ifeq "$(USE_OPT_LEVEL)" "_FAST_"
@@ -52,7 +52,7 @@ endif
 AR=ar rcs
 RANLIB=ranlib
 
-CFLAGS=$(OPT) -ggdb3 $(ADDITIONAL_SETTINGS) -D $(ARCHITECTURE) -D __LINUX__ -D $(USE_OPT_LEVEL) -D $(P128_PRIME) $(MULX) $(ADX) -fopenmp -fPIE
+CFLAGS=$(OPT) -pg -ggdb3 $(ADDITIONAL_SETTINGS) -D $(ARCHITECTURE) -D __LINUX__ -D $(USE_OPT_LEVEL) -D $(P128_PRIME) $(MULX) $(ADX) -fopenmp -fPIE
 LDFLAGS=-lm
 
 ifeq "$(ARCHITECTURE)" "_AMD64_"
@@ -61,28 +61,13 @@ CFLAGS += -mavx2 -maes -msse2
 endif
 endif
 
-ifeq "$(USE_OPT_LEVEL)" "_GENERIC_"
-    EXTRA_OBJECTS_128=objs128/fp_generic.o
-	EXTRA_OBJECTS_182=objs182/fp_generic.o
-    EXTRA_OBJECTS_434=objs434/fp_generic.o
-    EXTRA_OBJECTS_503=objs503/fp_generic.o
-    EXTRA_OBJECTS_751=objs751/fp_generic.o
-else ifeq "$(USE_OPT_LEVEL)" "_FAST_"
-ifeq "$(ARCHITECTURE)" "_AMD64_"
-	EXTRA_OBJECTS_128=objs128/fp_x64.o objs128/fp_x64_asm.o
-	EXTRA_OBJECTS_182=objs182/fp_x64.o objs182/fp_x64_asm.o
-	EXTRA_OBJECTS_434=objs434/fp_x64.o objs434/fp_x64_asm.o
-	EXTRA_OBJECTS_503=objs503/fp_x64.o objs503/fp_x64_asm.o
-	EXTRA_OBJECTS_751=objs751/fp_x64.o objs751/fp_x64_asm.o
-	CFLAGS+= -fPIC
-else ifeq "$(ARCHITECTURE)" "_ARM64_"
-    EXTRA_OBJECTS_128=objs128/fp_arm64.o objs128/fp_arm64_asm.o
-    EXTRA_OBJECTS_182=objs182/fp_arm64.o objs182/fp_arm64_asm.o
-    EXTRA_OBJECTS_434=objs434/fp_arm64.o objs434/fp_arm64_asm.o
-    EXTRA_OBJECTS_503=objs503/fp_arm64.o objs503/fp_arm64_asm.o
-    EXTRA_OBJECTS_751=objs751/fp_arm64.o objs751/fp_arm64_asm.o
-endif
-endif
+# Force the use of generic math, even when _GENERIC_ not defined
+EXTRA_OBJECTS_128=objs128/fp_generic.o
+EXTRA_OBJECTS_182=objs182/fp_generic.o
+EXTRA_OBJECTS_434=objs434/fp_generic.o
+EXTRA_OBJECTS_503=objs503/fp_generic.o
+EXTRA_OBJECTS_751=objs751/fp_generic.o
+
 OBJECTS_128=objs128/P128.o $(EXTRA_OBJECTS_128) objs/random.o objs/fips202.o
 OBJECTS_182=objs182/P182.o $(EXTRA_OBJECTS_182) objs/random.o objs/fips202.o
 OBJECTS_434=objs434/P434.o $(EXTRA_OBJECTS_434) objs/random.o objs/fips202.o
@@ -111,8 +96,7 @@ objs751/%.o: src/P751/%.c
 	@mkdir -p $(@D)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-
-ifeq "$(USE_OPT_LEVEL)" "_GENERIC_"
+# Force the use of generic math, even when _GENERIC_ not defined
 objs128/fp_generic.o: src/P128/generic/fp_generic.c
 	$(CC) -c $(CFLAGS) src/P128/generic/fp_generic.c -o objs128/fp_generic.o
 
@@ -127,69 +111,6 @@ objs503/fp_generic.o: src/P503/generic/fp_generic.c
 
 objs751/fp_generic.o: src/P751/generic/fp_generic.c
 	$(CC) -c $(CFLAGS) src/P751/generic/fp_generic.c -o objs751/fp_generic.o
-else ifeq "$(USE_OPT_LEVEL)" "_FAST_"
-ifeq "$(ARCHITECTURE)" "_AMD64_"
-objs128/fp_x64.o: src/P128/AMD64/fp_x64.c
-	$(CC) -c $(CFLAGS) src/P128/AMD64/fp_x64.c -o objs128/fp_x64.o
-
-objs128/fp_x64_asm.o: src/P128/AMD64/fp_x64_asm.S
-	$(CC) -c $(CFLAGS) src/P128/AMD64/fp_x64_asm.S -o objs128/fp_x64_asm.o
-
-objs182/fp_x64.o: src/P182/AMD64/fp_x64.c
-	$(CC) -c $(CFLAGS) src/P182/AMD64/fp_x64.c -o objs182/fp_x64.o
-
-objs182/fp_x64_asm.o: src/P182/AMD64/fp_x64_asm.S
-	$(CC) -c $(CFLAGS) src/P182/AMD64/fp_x64_asm.S -o objs182/fp_x64_asm.o
-
-objs434/fp_x64.o: src/P434/AMD64/fp_x64.c
-	$(CC) -c $(CFLAGS) src/P434/AMD64/fp_x64.c -o objs434/fp_x64.o
-
-objs434/fp_x64_asm.o: src/P434/AMD64/fp_x64_asm.S
-	$(CC) -c $(CFLAGS) src/P434/AMD64/fp_x64_asm.S -o objs434/fp_x64_asm.o
-
-objs503/fp_x64.o: src/P503/AMD64/fp_x64.c
-	$(CC) -c $(CFLAGS) src/P503/AMD64/fp_x64.c -o objs503/fp_x64.o
-
-objs503/fp_x64_asm.o: src/P503/AMD64/fp_x64_asm.S
-	$(CC) -c $(CFLAGS) src/P503/AMD64/fp_x64_asm.S -o objs503/fp_x64_asm.o
-
-objs751/fp_x64.o: src/P751/AMD64/fp_x64.c
-	$(CC) -c $(CFLAGS) src/P751/AMD64/fp_x64.c -o objs751/fp_x64.o
-
-objs751/fp_x64_asm.o: src/P751/AMD64/fp_x64_asm.S
-	$(CC) -c $(CFLAGS) src/P751/AMD64/fp_x64_asm.S -o objs751/fp_x64_asm.o
-else ifeq "$(ARCHITECTURE)" "_ARM64_"	
-    objs128/fp_arm64.o: src/P128/ARM64/fp_arm64.c
-	    $(CC) -c $(CFLAGS) src/P128/ARM64/fp_arm64.c -o objs128/fp_arm64.o
-
-    objs128/fp_arm64_asm.o: src/P128/ARM64/fp_arm64_asm.S
-	    $(CC) -c $(CFLAGS) src/P128/ARM64/fp_arm64_asm.S -o objs128/fp_arm64_asm.o
-
-	objs182/fp_arm64.o: src/P182/ARM64/fp_arm64.c
-	    $(CC) -c $(CFLAGS) src/P182/ARM64/fp_arm64.c -o objs182/fp_arm64.o
-
-    objs182/fp_arm64_asm.o: src/P182/ARM64/fp_arm64_asm.S
-	    $(CC) -c $(CFLAGS) src/P182/ARM64/fp_arm64_asm.S -o objs182/fp_arm64_asm.o
-			
-    objs434/fp_arm64.o: src/P434/ARM64/fp_arm64.c
-	    $(CC) -c $(CFLAGS) src/P434/ARM64/fp_arm64.c -o objs434/fp_arm64.o
-
-    objs434/fp_arm64_asm.o: src/P434/ARM64/fp_arm64_asm.S
-	    $(CC) -c $(CFLAGS) src/P434/ARM64/fp_arm64_asm.S -o objs434/fp_arm64_asm.o
-
-    objs503/fp_arm64.o: src/P503/ARM64/fp_arm64.c
-	    $(CC) -c $(CFLAGS) src/P503/ARM64/fp_arm64.c -o objs503/fp_arm64.o
-
-    objs503/fp_arm64_asm.o: src/P503/ARM64/fp_arm64_asm.S
-	    $(CC) -c $(CFLAGS) src/P503/ARM64/fp_arm64_asm.S -o objs503/fp_arm64_asm.o
-
-    objs751/fp_arm64.o: src/P751/ARM64/fp_arm64.c
-	    $(CC) -c $(CFLAGS) src/P751/ARM64/fp_arm64.c -o objs751/fp_arm64.o
-
-    objs751/fp_arm64_asm.o: src/P751/ARM64/fp_arm64_asm.S
-	    $(CC) -c $(CFLAGS) src/P751/ARM64/fp_arm64_asm.S -o objs751/fp_arm64_asm.o
-endif
-endif
 
 INDEPENDENT_OBJS=objs/random.o objs/fips202.o objs/storage.o objs/networking.o objs/prng.o objs/gen_vow.o objs/sidh_vow.o objs/sike_vow.o objs/bintree.o objs/memory.o objs/xxhash.o objs/triples.o
 objs/random.o: src/random/random.c

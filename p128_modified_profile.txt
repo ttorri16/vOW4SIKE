@@ -1,0 +1,91 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 39.24      2.06     2.06 25805332     0.00     0.00  mp_mul
+ 14.48      2.82     0.76                             BacktrackSIDH
+ 12.86      3.50     0.68  3294204     0.00     0.00  aes128_load_schedule_ni
+  9.53      4.00     0.50 22269131     0.00     0.00  rdc_mont
+  4.00      4.21     0.21  4880514     0.00     0.00  UpdateStSIDH
+  3.81      4.41     0.20 11467187     0.00     0.00  fpcorrection128
+  3.05      4.57     0.16  4035650     0.00     0.00  fp2_encode
+  2.67      4.71     0.14  4525605     0.00     0.00  XOF
+  2.57      4.84     0.14  6095153     0.00     0.00  AES128_enc
+  1.33      4.91     0.07  4128520     0.00     0.00  fp2mul128_mont
+  1.33      4.98     0.07  3371393     0.00     0.00  UpdateSIDH
+  0.95      5.03     0.05    81919     0.00     0.00  fpinv128_mont
+  0.76      5.07     0.04  7044705     0.00     0.00  fpsub128
+  0.57      5.10     0.03                             fpdiv2_128
+  0.57      5.13     0.03  5466501     0.00     0.00  fpadd128
+  0.57      5.16     0.03  5427780     0.00     0.00  aes128_enc_ni
+  0.57      5.19     0.03  2348222     0.00     0.00  fp2sqr128_mont
+  0.57      5.22     0.03  1074009     0.00     0.00  sample_prng
+  0.19      5.23     0.01  4929585     0.00     0.00  fp2copy128
+  0.19      5.24     0.01                             SampleSIDH
+  0.10      5.25     0.01  4356305     0.00     0.00  AES128_load_schedule
+  0.10      5.25     0.01                             AES128_free_schedule
+  0.00      5.25     0.00   557037     0.00     0.00  fpcopy128
+  0.00      5.25     0.00   557037     0.00     0.00  fpzero128
+  0.00      5.25     0.00   344049     0.00     0.00  xDBLADD
+  0.00      5.25     0.00   218419     0.00     0.00  fp2add128
+  0.00      5.25     0.00   196596     0.00     0.00  eval_4_isog
+  0.00      5.25     0.00   169269     0.00     0.00  fp2sub128
+  0.00      5.25     0.00   106444     0.00     0.00  fpneg128
+  0.00      5.25     0.00    81919     0.00     0.00  fp2inv128_mont
+  0.00      5.25     0.00    65534     0.00     0.00  copy_words
+  0.00      5.25     0.00    65533     0.00     0.00  LadderThreePtSIKE.constprop.1
+  0.00      5.25     0.00    65532     0.00     0.00  IsogenyWithPoints.constprop.0
+  0.00      5.25     0.00    65532     0.00     0.00  LadderThreePtSIKE.constprop.0
+  0.00      5.25     0.00    65532     0.00     0.00  get_4_isog
+  0.00      5.25     0.00    60044     0.00     0.00  xDBL_affine
+  0.00      5.25     0.00    49152     0.00     0.00  fp2correction128
+  0.00      5.25     0.00    49152     0.00     0.00  j_inv
+  0.00      5.25     0.00    16383     0.00     0.00  FourwayInv
+  0.00      5.25     0.00      533     0.00     0.00  free_trip
+  0.00      5.25     0.00        6     0.00     0.00  EvalTwoIsogenyWithXneZ
+  0.00      5.25     0.00        6     0.00     0.00  init_private_state
+  0.00      5.25     0.00        3     0.00     0.00  EvalFourIsogenyWithKernelXeqZ
+  0.00      5.25     0.00        2     0.00     0.00  cpucycles
+  0.00      5.25     0.00        2     0.00     0.00  init_prng
+  0.00      5.25     0.00        2     0.00     0.00  init_trip
+  0.00      5.25     0.00        1     0.00     0.00  OptStrat.constprop.0
+  0.00      5.25     0.00        1     0.00     1.30  PrecompLeftCurve
+  0.00      5.25     0.00        1     0.00     0.65  PrecompRightCurve
+  0.00      5.25     0.00        1     0.00     0.00  free_shared_state
+  0.00      5.25     0.00        1     0.00     1.95  init_shared_state
+  0.00      5.25     0.00        1     0.00     0.00  reset_shared_state
+  0.00      5.25     0.00        1     0.00     0.00  vOW
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.

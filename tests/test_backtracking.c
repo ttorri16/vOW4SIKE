@@ -96,6 +96,7 @@ int HanselGretel(int distinguished_position, PCrumbsSIDH StructCrumbs)
     StructCrumbs->max_distance = (unsigned int*)calloc(1, max_crumbs*sizeof(unsigned int));
     StructCrumbs->crumbs = (uint64_t*)calloc(1, max_crumbs*sizeof(uint64_t));
     StructCrumbs->index_crumbs = (unsigned int*)calloc(1, max_crumbs*sizeof(unsigned int));
+    StructCrumbs->index_crumbs[0] = 0;
     
     Status = HanselGretel(distinguished_position, StructCrumbs);    // Testing Hansel & Gretel technique
     if (Status != PASSED) {

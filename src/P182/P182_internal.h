@@ -117,6 +117,8 @@ void mp_shiftl1(digit_t* x, const unsigned int nwords);
 // Multiprecision comba multiply, c = a*b, where lng(a) = lng(b) = nwords.
 void mp_mul(const digit_t* a, const digit_t* b, digit_t* c, const unsigned int nwords);
 
+void mp_mul3(const digit_t* a, const digit_t* b, digit_t* c);
+
 /************ Field arithmetic functions *************/
 
 // Copy of a field element, c = a

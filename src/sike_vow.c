@@ -242,10 +242,10 @@ void PrecompLeftCurve(CurveAndPointsSIDH *E0, CurveAndPointsSIDH *LeftE, unsigne
     xDBLADD(XQ, XPQ, LeftE->xp, LeftE->a24);
     xDBLe_affine(XP, XR, LeftE->a24, e - 2);
 
-    GetTwoIsogenyWithXneZ(XR, A24);
-    EvalTwoIsogenyWithXneZ(XR, XP);
-    EvalTwoIsogenyWithXneZ(XR, XQ);
-    EvalTwoIsogenyWithXneZ(XR, XPQ);
+    GetTwoIsogenyWithXneZ(XR, A24);  //changes a24
+    EvalTwoIsogenyWithXneZ(XR, XP);  // changes XP
+    EvalTwoIsogenyWithXneZ(XR, XQ);  //changes XQ
+    EvalTwoIsogenyWithXneZ(XR, XPQ); //changes XPQ
 
     FourwayInv(A24->Z, XP->Z, XQ->Z, XPQ->Z);
     fp2mul_mont(A24->X, A24->Z, E0[0].a24);

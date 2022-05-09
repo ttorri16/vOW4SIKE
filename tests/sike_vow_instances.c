@@ -1,5 +1,7 @@
 // Definition of instances to run attack on SIKE
 
+// See instance.h for attempted explanations of values
+
 #if defined(p_32_20)
 #define NUM_INSTS_STATS 1
 instance_t insts_stats[NUM_INSTS_STATS] = {
@@ -204,29 +206,30 @@ instance_t insts_stats[NUM_INSTS_STATS] = {
     #define NUM_INSTS_STATS 1
     instance_t insts_stats[NUM_INSTS_STATS] = {
         {
-            .e = 23, // ideally about e_2 / 2
-            .MEMORY_LOG_SIZE = 10, // w = 2^MEMORY_LOG_SIZE
-            .ALPHA = 2.25,
+            .e = 23, 
+            .MEMORY_LOG_SIZE = 10, 
+            .ALPHA = 2.25, 
             .BETA = 10.,
             .GAMMA = 20.,
             .PRNG_SEED = 1337,
-            .delta = 21, // delta < e, (e - delta - 2) = 0 mod 2
+            .delta = 21, // precomputation depth, delta < e, (e - delta - 2) = 0 mod 2
 
             // "The solution" ??
             .jinv = { 0x6BE8246542864A37, 0x11E362B039D68837, 0x9BC7A67DEEC54A2E },
-            //Starting curve(s) ?????
+            //E[0] is "left curve" and E[1] is "right curve" in precomputation
             .E = {
+                //We have yet to figure out how to find these curves
                 {
-                .a24 = { 0xE858, 0x0, 0x0 },
-                .xp = { 0x88AEA34159076AB3, 0xA5A5CB1A903DA770, 0x16B33C999300B977},
-                .xq = { 0x3BF57331DB10FDB2, 0x936F70C4C619C7B7, 0x3D4081EE4B1462B7},
-                .xpq = { 0xE94179134A7F2DE2, 0x6673CCEC7252249, 0xC79527DE95BA4360}
+                .a24 = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 },
+                .xp = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+                .xq = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+                .xpq = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
                 },
                 {
-                .a24 = { 0x605AB9CC9FE6D6C7, 0xA678D2205581290F, 0xDA9DB6845C7FF497},
-                .xp = { 0x8ACB2783EDA6DC9D, 0xEB56FB79524430BE, 0x208FDFEB6C1FD415},
-                .xq = { 0x47508122C6E97FD0, 0x19DE7CCF3CAA0F6, 0xC7582D8790F47019 },
-                .xpq = { 0xF14246746D3FA1A4, 0x405E0AD8A0BB8679, 0x114A7CADA7AB5622}
+                .a24 = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+                .xp = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+                .xq = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+                .xpq = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
                 }}
         }
     };
@@ -234,6 +237,7 @@ instance_t insts_stats[NUM_INSTS_STATS] = {
 #define NUM_INSTS_STATS 1
 instance_t insts_stats[NUM_INSTS_STATS] = {
     {
+        // See page 22 of Costello et. al.
         .e = 20,
         .MEMORY_LOG_SIZE = 10,
         .ALPHA = 2.25,

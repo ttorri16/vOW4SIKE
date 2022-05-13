@@ -43,31 +43,23 @@ __inline void fpadd182_fast(const digit_t* a, const digit_t* b, digit_t* c) {
 /* We know NWORDS_FIELD == 3, so use this info to avoid for loops -> hopefully 
     this will compile to fewer instructions */
 /*NOTE: this is technically no longer generic since it assumes a 64-bit architecture, but
-        I'm pretty sure there are other places in the code that also make this assumption */
+        I think there are other places in the code that also make this assumption */
+/* Time difference between this and fpadd182 is probably negligible */
 
     unsigned int i, carry = 0;
     digit_t mask;
 
-    // for (i = 0; i < NWORDS_FIELD; i++) {
-        // ADDC(carry, a[i], b[i], carry, c[i]); 
-    // }
     ADDC(carry, a[0], b[0], carry, c[0]); 
     ADDC(carry, a[1], b[1], carry, c[1]); 
     ADDC(carry, a[2], b[2], carry, c[2]); 
 
     carry = 0;
-    // for (i = 0; i < NWORDS_FIELD; i++) {
-        // SUBC(carry, c[i], ((digit_t*)p182x2)[i], carry, c[i]); 
-    // }
     SUBC(carry, c[0], ((digit_t*)p182x2)[0], carry, c[0]); 
     SUBC(carry, c[1], ((digit_t*)p182x2)[1], carry, c[1]); 
     SUBC(carry, c[2], ((digit_t*)p182x2)[2], carry, c[2]); 
     mask = 0 - (digit_t)carry;
 
     carry = 0;
-    // for (i = 0; i < NWORDS_FIELD; i++) {
-        // ADDC(carry, c[i], ((digit_t*)p182x2)[i] & mask, carry, c[i]); 
-    // }
     ADDC(carry, c[0], ((digit_t*)p182x2)[0] & mask, carry, c[0]); 
     ADDC(carry, c[1], ((digit_t*)p182x2)[1] & mask, carry, c[1]); 
     ADDC(carry, c[2], ((digit_t*)p182x2)[2] & mask, carry, c[2]); 
@@ -207,6 +199,7 @@ void mp_mul(const digit_t* a, const digit_t* b, digit_t* c, const unsigned int n
     c[2*nwords-1] = v; 
 }
 
+/* fast multiplication in Fp using Karatsuba       written by Tori Mannarelli (so theres probably bugs) */
 void mp_mul3(const digit_t* a, const digit_t* b, digit_t* c) {
     // first do (a[1], a[2])*(b[1], b[2]) using karatsuba
 
@@ -248,24 +241,16 @@ void mp_mul3(const digit_t* a, const digit_t* b, digit_t* c) {
     // prod - a0b0
     SUBC(0, prod[0], c[0], carrya, prod[0]); 
     SUBC(carrya, prod[1], c[1], carrya, prod[1]);
-    // SUBC(carrya, prod[2], 0, carrya, prod[2]);
     prod[2] -= carrya;
     // assert(carrya == 0);
 
     //prod - a1b1
     SUBC(0, prod[0], c[2], carrya, prod[0]); 
     SUBC(carrya, prod[1], c[3], carrya, prod[1]);
-    // SUBC(carrya, prod[2], 0, carrya, prod[2]);
     prod[2] -= carrya;
     // assert(carrya == 0);
 
-    // // add a1b1[1] a1b1[0] a0b0[1] a0b0[0] 
-    // a0b00[3] = a1b1[1]; //reuse variable for efficiency
-    // a0b00[2] = a1b1[0];
-    // a0b00[1] = a0b0[1];
-    // a0b00[0] = a0b0[0]; 
-    // mp_add(a0b00, intermed, intermed, 4);
-
+    // add a1b1[1] a1b1[0] a0b0[1] a0b0[0] 
     ADDC(0, c[1], prod[0], carrya, c[1]);
     ADDC(carrya, c[2], prod[1], carrya, c[2]);
     ADDC(carrya, c[3], prod[2], carrya, c[3]);

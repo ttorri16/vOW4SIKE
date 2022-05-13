@@ -29,7 +29,7 @@
 #define NWORDS64_FIELD          ((NBITS_FIELD+63)/64)               // Number of 64-bit words of a 182-bit field element 
 #define NBITS_ORDER             128 // i have no clue what this number is - i did the next multiple of 64 after 91 (number of bits in 2^e2 and 3^e3)
 #define NWORDS_ORDER            ((NBITS_ORDER+RADIX-1)/RADIX)       // Number of words of oA and oB, where oA and oB are the subgroup orders of Alice and Bob, resp.
-#define NWORDS64_ORDER          ((NBITS_ORDER+63)/64)               // Number of 64-bit words of a 256-bit element 
+#define NWORDS64_ORDER          ((NBITS_ORDER+63)/64)               // Number of 64-bit words of a 91-bit element 
 #define MAXBITS_ORDER           NBITS_ORDER                         
 #define MAXWORDS_ORDER          ((MAXBITS_ORDER+RADIX-1)/RADIX)     // Max. number of words to represent elements in [1, oA-1] or [1, oB].
 #define ALICE                   0
@@ -38,8 +38,8 @@
 #define OBOB_BITS               91          // number of bits in 3**e3
 #define OBOB_EXPON              57          // Bob's part is 3**57 (e3 = 57)
 #define PRIME                   p182 
-#define PARAM_A                 6  
-#define PARAM_C                 1
+#define PARAM_A                 6           // Starting curve is y^2 = x^3 + 6x^2 + x 
+#define PARAM_C                 1           // ^^^
 // Fixed parameters for isogeny tree computation
 #define SECRETKEY_A_BYTES       ((OALICE_BITS + 7) / 8)
 #define SECRETKEY_B_BYTES       ((OBOB_BITS - 1 + 7) / 8)
@@ -49,25 +49,10 @@
 #define MAX_Alice               46  // e2 / 2
 #define MAX_Bob                 57  // e3
 
-// #define ALICE                   0
-// #define BOB                     1 
-// #define OALICE_BITS             216  
-// #define OBOB_BITS               218     
-// #define MASK_ALICE              0xFF 
-// #define MASK_BOB                0x01 
-// #define PRIME                   p434 
-// #define PARAM_A                 6  
-// #define PARAM_C                 1
-// Fixed parameters for isogeny tree computation
-// #define MAX_INT_POINTS_ALICE    7        
-// #define MAX_INT_POINTS_BOB      8      
-// #define MAX_Alice               108
-// #define MAX_Bob                 137
+// Not sure what this is supposed to be
 // #define MSG_BYTES               16
-// #define SECRETKEY_A_BYTES       ((OALICE_BITS + 7) / 8)
-// #define SECRETKEY_B_BYTES       ((OBOB_BITS - 1 + 7) / 8)
-// #define FP2_ENCODED_BYTES       2*((NBITS_FIELD + 7) / 8)
-// 
+
+
 // SIDH's basic element definitions and point representations
 
 typedef digit_t felm_t[NWORDS_FIELD];                                 // Datatype for representing 182-bit field elements 
@@ -76,7 +61,6 @@ typedef felm_t  f2elm_t[2];                                           // Datatyp
         
 typedef struct { f2elm_t X; f2elm_t Z; } point_proj;                  // Point representation in projective XZ Montgomery coordinates.
 typedef point_proj point_proj_t[1]; 
-
 
 
 /**************** Function prototypes ****************/

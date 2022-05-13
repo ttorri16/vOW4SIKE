@@ -5,6 +5,8 @@
 
 
 /*
+* Hand-written arithmetic tests for p182
+*
 * HOW TO RUN:
 * in the root folder, do "make p182_unit_test"
 * executable will be named p182test
@@ -158,36 +160,5 @@ int main() {
     printf("Generic:\t%ld\n", cycles/loops);
     printf("Karatsuba:\t%ld\n", cycles182/loops);
 
-    // //digit multiplication
-    // digit_x_digit(num1[0], num2[0], &ans[0]);
-    // printf("num1[0] * num2[0] is:\t0x%016lx%016lx\n", ans[1], ans[0]);
-    // printf("Supposed to be \t0x021275d9e2f20ae5b867349c8bab2820\n\n");
-
-
-    //MONTGOMERY REPRESENTATION
-    // digit_t mnum1[3];
-    // digit_t mnum2[3];
-    // to_mont(&num1[0], &mnum1[0]);
-    // to_mont(&num2[0], &mnum2[0]);
-
-
-    // fpmul_mont(&mnum1[0], &mnum1[0], &ans[0]);
-
-    // fpsqr_mont        
-    // fpinv_mont        
-// fpinv_chain_mont  
-// fpinv_mont_bingcd 
-// fp2copy           
-// fp2zero           
-// fp2add            
-// fp2sub            
-// fp2neg            
-// fp2div2           
-// fp2correction     
-// fp2mul_mont       
-// fp2sqr_mont       
-// fp2inv_mont       
-// fp2inv_mont_bingcd
-    
 }
 

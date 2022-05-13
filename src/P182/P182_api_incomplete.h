@@ -2,6 +2,10 @@
 * SIDH: an efficient supersingular isogeny cryptography library
 *
 * Abstract: API header file for P182
+*
+* NOTE: !!!!!!!!!!!!!!!!!!!!!
+             THIS IS a COPY-PASTE from P434! VALUES AND EXPLANATIONS ARE LIKELY INCORRECT!!!!!
+        !!!!!!!!!!!!!!!!!!!!
 *********************************************************************************************/  
 
 #ifndef P182_API_H

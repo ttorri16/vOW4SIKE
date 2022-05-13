@@ -4,8 +4,8 @@ OPT=-O3   # Optimization option by default
 
 CC=gcc
 
-# Pick a prime for the P128 implementation. Available options: p_32_20, p_36_22, p_40_25, p_44_27, p_48_30, p_52_33, p_56_35, p_60_38
-P128_PRIME=p_91_57
+# Pick a prime for testing. Available options: p_32_20, p_36_22, p_40_25, p_44_27, p_48_30, p_52_33, p_56_35, p_60_38, p_91_57, p_216_137
+P128_PRIME=p_32_20
 
 # ld sometimes struggles finding -lgomp. The following variable points it directly there.
 LDOMP=-L/usr/lib/x86_64-linux-gnu/ -l:libgomp.so.1
@@ -187,19 +187,18 @@ lib751: $(OBJECTS_751)
 	$(AR) lib751/libsidh.a $^
 	$(RANLIB) lib751/libsidh.a
 
-# tests: lib128 lib182 lib434 lib503 lib751
-tests: lib182
-	# $(CC) $(CFLAGS) -L./lib128 tests/arith_tests-p128.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p128 $(ARM_SETTING)
+tests: lib128 lib182 lib434 lib503 lib751
+# tests: lib182
+	$(CC) $(CFLAGS) -L./lib128 tests/arith_tests-p128.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p128 $(ARM_SETTING)
 	$(CC) $(CFLAGS) -L./lib182 tests/arith_tests-p182.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p182 $(ARM_SETTING)
-	# $(CC) $(CFLAGS) -L./lib434 tests/arith_tests-p434.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p434 $(ARM_SETTING)
+	$(CC) $(CFLAGS) -L./lib434 tests/arith_tests-p434.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p434 $(ARM_SETTING)
 	# $(CC) $(CFLAGS) -L./lib503 tests/arith_tests-p503.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p503 $(ARM_SETTING)
 	# $(CC) $(CFLAGS) -L./lib751 tests/arith_tests-p751.c tests/test_extras.c -lsidh $(LDFLAGS) -o arith_tests-p751 $(ARM_SETTING)
-	# $(CC) $(CFLAGS) -L./lib434 tests/test_SIDHp434.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh434/test_SIDH $(ARM_SETTING)
+	$(CC) $(CFLAGS) -L./lib434 tests/test_SIDHp434.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh434/test_SIDH $(ARM_SETTING)
 	# $(CC) $(CFLAGS) -L./lib503 tests/test_SIDHp503.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh503/test_SIDH $(ARM_SETTING)
 	# $(CC) $(CFLAGS) -L./lib751 tests/test_SIDHp751.c tests/test_extras.c -lsidh $(LDFLAGS) -o sidh751/test_SIDH $(ARM_SETTING)
-	 $(CC) $(CFLAGS) -L./lib182 tests/test_SIKEp182.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike182/test_SIKE $(ARM_SETTING)
-	# $(CC) $(CFLAGS) -L./lib434 tests/test_SIKEp182.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike434/test_SIKE $(ARM_SETTING)
-	# $(CC) $(CFLAGS) -L./lib434 tests/test_SIKEp434.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike434/test_SIKE $(ARM_SETTING)
+	#  $(CC) $(CFLAGS) -L./lib182 tests/test_SIKEp182.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike182/test_SIKE $(ARM_SETTING)
+	$(CC) $(CFLAGS) -L./lib434 tests/test_SIKEp434.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike434/test_SIKE $(ARM_SETTING)
 	# $(CC) $(CFLAGS) -L./lib503 tests/test_SIKEp503.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike503/test_SIKE $(ARM_SETTING)
 	# $(CC) $(CFLAGS) -L./lib751 tests/test_SIKEp751.c tests/test_extras.c -lsidh $(LDFLAGS) -o sike751/test_SIKE $(ARM_SETTING)
 	

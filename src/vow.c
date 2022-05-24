@@ -19,6 +19,21 @@
 #include "sync_strategies.c"
 #include "benchmarking.c"
 
+// Print statements for debugging
+void print_st(st_t *s, shared_state_t *shared_state)
+{
+    uint64_t i;
+
+    if (s->bytes == NULL) {
+        for (i = 0; i < shared_state->NBYTES_STATE; i++)
+            printf("--");
+        return;
+    }
+    for (i = 0; i < shared_state->NBYTES_STATE; i++)
+        printf("%02x", s->bytes[i]);
+}
+
+
 /**
  * @brief runs one "iteration" of vOW: sampling a point, checking for distinguishedness and possibly backtracking
  * 
@@ -36,6 +51,7 @@ static inline bool vOW_one_iteration(
     bool *success,
     double ratio_of_points_to_mine)
 {
+    // printf("mine a point (1 vow iteration)\n");
     // Walk to the next point using the current random function
     update(private_state);
     private_state->current.current_steps += 1;
@@ -59,6 +75,9 @@ static inline bool vOW_one_iteration(
             private_state->mem_collisions += 1;
         } else {
             // Not a simple memory collision, backtrack!
+            // printf("Collision ");
+            // print_st(&private_state->trip.current_state, S);
+            // printf("\n");
             copy_trip(t, &private_state->current, private_state->NWORDS_STATE);
             res = backtrack(&private_state->trip, t, S, private_state);
 

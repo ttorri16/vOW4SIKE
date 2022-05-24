@@ -31,14 +31,14 @@ typedef struct
 typedef struct
 {
     char MODULUS[10];
-    unsigned long e;
-    unsigned long MEMORY_LOG_SIZE;
-    double ALPHA;
-    double BETA;
-    double GAMMA;
-    uint64_t PRNG_SEED;
+    unsigned long e; // e2 / 2 ?? or is it d ?? see page 14 of Cosello et. al.
+    unsigned long MEMORY_LOG_SIZE; // w = 2^MEMORY_LOG_SIZE
+    double ALPHA; // theta = alpha * sqrt( memory size / 2^(e-1) ), page 6 of Costello et. al.
+    double BETA; // change function version after (beta * memory size) distinguished points, page 7 Costello et. al.
+    double GAMMA; // max vow steps before restarting is gamma/theta 
+    uint64_t PRNG_SEED; 
     uint16_t N_OF_CORES;
-    CurveAndPointsSIDH E[2];
+    CurveAndPointsSIDH E[2]; // left and right precomputation curves, page 13-15, see PrecompRightCurve and PrecompLeftCurve in sike.c
     unsigned long delta; /* Depth of pre-computation */
     f2elm_t jinv;        /* For verifying */
     bool HANSEL_GRETEL;

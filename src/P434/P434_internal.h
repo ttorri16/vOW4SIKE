@@ -15,6 +15,7 @@
     #define p434_ZERO_WORDS 3               // Number of "0" digits in the least significant part of p434 + 1 
 #endif
     
+    // 2^216 * 3^137-1
 
 // Basic constants
 
@@ -40,8 +41,8 @@
 // Fixed parameters for isogeny tree computation
 #define MAX_INT_POINTS_ALICE    7        
 #define MAX_INT_POINTS_BOB      8      
-#define MAX_Alice               108
-#define MAX_Bob                 137
+#define MAX_Alice               108  //==216/2  Number of leaves in tree, n+1, where n is the strategy size
+#define MAX_Bob                 137  //number of leaves in tree, n+1, where n is the strategy size
 #define MSG_BYTES               16
 #define SECRETKEY_A_BYTES       ((OALICE_BITS + 7) / 8)
 #define SECRETKEY_B_BYTES       ((OBOB_BITS - 1 + 7) / 8)

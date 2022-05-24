@@ -88,6 +88,7 @@ static void IsogenyWithPoints(point_proj_t A24, point_proj_t XP, point_proj_t XQ
     EvalFourIsogenyWithKernelXneZ(XPQ, coeff);
 }
 
+//Section 3.3 of Costello et. al
 void PrecompRightCurve(CurveAndPointsSIDH *E1, CurveAndPointsSIDH *RightE, unsigned long delta, unsigned long e)
 {
     /* First 1 step with kernel x = 1 */
@@ -218,6 +219,7 @@ static void EvalTwoIsogenyWithXneZ(const point_proj_t R, point_proj_t P)
     fp2mul_mont(P->Z, T1, P->Z);
 }
 
+//Section 3.3 of Costello et. al
 void PrecompLeftCurve(CurveAndPointsSIDH *E0, CurveAndPointsSIDH *LeftE, unsigned long delta, unsigned long e)
 {
     unsigned long h, j, index_r, index_w;
@@ -240,10 +242,10 @@ void PrecompLeftCurve(CurveAndPointsSIDH *E0, CurveAndPointsSIDH *LeftE, unsigne
     xDBLADD(XQ, XPQ, LeftE->xp, LeftE->a24);
     xDBLe_affine(XP, XR, LeftE->a24, e - 2);
 
-    GetTwoIsogenyWithXneZ(XR, A24);
-    EvalTwoIsogenyWithXneZ(XR, XP);
-    EvalTwoIsogenyWithXneZ(XR, XQ);
-    EvalTwoIsogenyWithXneZ(XR, XPQ);
+    GetTwoIsogenyWithXneZ(XR, A24);  //changes a24
+    EvalTwoIsogenyWithXneZ(XR, XP);  // changes XP
+    EvalTwoIsogenyWithXneZ(XR, XQ);  //changes XQ
+    EvalTwoIsogenyWithXneZ(XR, XPQ); //changes XPQ
 
     FourwayInv(A24->Z, XP->Z, XQ->Z, XPQ->Z);
     fp2mul_mont(A24->X, A24->Z, E0[0].a24);
@@ -279,8 +281,12 @@ void PrecompLeftCurve(CurveAndPointsSIDH *E0, CurveAndPointsSIDH *LeftE, unsigne
     fp2mul_mont(XPQ->X, XPQ->Z, E0[1].xpq);
 
     if (delta != 0) {
+        // #pragma omp parallel for
         for (h = 0; h < delta / 2; h++) {
+            // int id = omp_get_thread_num();
+            // printf("%d: h=%ld\n", id, h);
             for (index_r = 0; index_r < (unsigned long)(2 * (1 << 2 * h)); index_r++) {
+                // printf("%d: index_r=%ld\n", id, index_r);
                 // Get curve and points P, Q, P-Q at index_r
                 fp2copy(E0[index_r].a24, A24->X);
                 fpcopy((digit_t *)&Montgomery_one, A24->Z[0]);
@@ -311,6 +317,7 @@ void PrecompLeftCurve(CurveAndPointsSIDH *E0, CurveAndPointsSIDH *LeftE, unsigne
                 xDBL_affine(XQ2, XQ2, A24->X);
 
                 for (j = 0; j < 4; j++) {
+                    // printf("%d: j=%ld\n",id, j);
                     k[0] = (unsigned char)j;
                     l[0] = (unsigned char)(4 - j);
 
@@ -382,6 +389,7 @@ void init_shared_state(instance_t *inst, shared_state_t *S
     S->E[0] = calloc(((size_t)1 << (S->delta + 1)) * 4 * 2 * (size_t)NWORDS_FIELD, sizeof(digit_t));
     PrecompLeftCurve(S->E[0], &inst->E[0], S->delta, inst->e);
     S->external_E[0] = false;
+    printf("Left curve done\n");
 
     S->E[1] = calloc(((size_t)1 << S->delta) * 4 * 2 * (size_t)NWORDS_FIELD, sizeof(digit_t));
     PrecompRightCurve(S->E[1], &inst->E[1], S->delta, inst->e);

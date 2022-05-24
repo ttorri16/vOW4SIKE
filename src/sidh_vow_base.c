@@ -341,6 +341,7 @@ void UpdateRandomFunctionSIDH(shared_state_t *S, private_state_t *private_state)
 
 static inline bool BacktrackSIDH_core(trip_t *c0, trip_t *c1, shared_state_t *S, private_state_t *private_state)
 {
+    // printf("Backtracking\n");
     unsigned long L, i;
     st_t c0_, c1_;
     unsigned char jinv0[FP2_ENCODED_BYTES], jinv1[FP2_ENCODED_BYTES];
@@ -361,8 +362,10 @@ static inline bool BacktrackSIDH_core(trip_t *c0, trip_t *c1, shared_state_t *S,
         private_state->number_steps_locate += 1;
     }
 
-    if (is_equal_st(&c0->initial_state, &c1->initial_state, private_state->NWORDS_STATE))
+    if (is_equal_st(&c0->initial_state, &c1->initial_state, private_state->NWORDS_STATE)) {
+        // printf("Robin Hood\n");
         return false; // Robin Hood
+    }
 
     c0_ = init_st(private_state->NWORDS_STATE);
     c1_ = init_st(private_state->NWORDS_STATE);
@@ -376,6 +379,7 @@ static inline bool BacktrackSIDH_core(trip_t *c0, trip_t *c1, shared_state_t *S,
         if (IsEqualJinvSIDH(jinv0, jinv1)) {
             /* Record collision */
             private_state->collisions += 1;
+            // printf("collision\n");
             if (private_state->collect_vow_stats) {
 #pragma omp critical
                 {
@@ -388,8 +392,10 @@ static inline bool BacktrackSIDH_core(trip_t *c0, trip_t *c1, shared_state_t *S,
             free_st(&c1_);
 
             if (GetC_SIDH(&c0->initial_state) == GetC_SIDH(&c1->initial_state)) {
+                // printf("GetC\n");
                 return false;
             } else {
+                printf("GOLDEN COLLISION\n");
                 fp2_decode(jinv0, jinv);
                 assert(fp2_is_equal(jinv, private_state->jinv)); /* Verify that we found the right one*/
                 return true;

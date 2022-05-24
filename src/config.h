@@ -69,14 +69,16 @@ typedef uint64_t digit_t;  // Unsigned 64-bit digit
 
 // Selection of generic, portable implementation
 
-#if defined(_GENERIC_)
+// This signals to use generic math, which we want even in fast mode
 #define GENERIC_IMPLEMENTATION
-#elif defined(_FAST_)
-#define FAST_IMPLEMENTATION
+
+#if defined(_FAST_)
+// #define FAST_IMPLEMENTATION
 #if (TARGET == TARGET_AMD64)
 #define AES_ENABLE_NI
 #endif
 #endif
+
 
 // Extended datatype support
 

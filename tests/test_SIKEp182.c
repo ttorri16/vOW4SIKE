@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "test_extras.h"
-#include "../src/P182/P182_api.h"
+#include "../src/P182/P182_api_incomplete.h"
 
 
 #define SCHEME_NAME    "SIKEp182"
